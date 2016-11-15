@@ -790,8 +790,6 @@ added: v0.11.3
 * `port` {number}
 * `host` {string}
 * `options` {Object}
-  * `host` {string} Host the client should connect to.
-  * `port` {number} Port the client should connect to.
   * `socket` {net.Socket} Establish secure connection on a given socket rather
     than creating a new socket. If this option is specified, `host` and `port`
     are ignored.
