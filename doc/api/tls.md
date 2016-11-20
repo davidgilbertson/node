@@ -343,7 +343,7 @@ added: v0.5.3
   `cert`, `ca`, etc).
 
 The `server.addContext()` method adds a secure context that will be used if
-the client request's SNS hostname matches the supplied `hostname` (or wildcard).
+the client request's SNI hostname matches the supplied `hostname` (or wildcard).
 
 ### server.address()
 <!-- YAML
@@ -365,7 +365,7 @@ added: v0.3.2
 The `server.close()` method stops the server from accepting new connections.
 
 This function operates asynchronously. The `'close'` event will be emitted
-when the the server is finally closed.
+when the server has no more open connections.
 
 ### server.connections
 <!-- YAML
@@ -395,7 +395,7 @@ added: v0.3.2
   on any IPv6 address (`::`) when IPv6 is available, or any IPv4 address
   (`0.0.0.0`) otherwise.
 * `callback` {Function} A callback function to be invoked when the server has
-  begun listening the the `port` and `hostname`.
+  begun listening on the `port` and `hostname`.
 
 The `server.listen()` methods instructs the server to begin accepting
 connections on the specified `port` and `hostname`.

@@ -698,7 +698,7 @@ static X509_STORE* NewRootCertStore() {
 
       if (x509 == nullptr) {
         // Parse errors from the built-in roots are fatal.
-        abort();
+        ABORT();
         return nullptr;
       }
 
@@ -770,9 +770,8 @@ void SecureContext::AddCRL(const FunctionCallbackInfo<Value>& args) {
       PEM_read_bio_X509_CRL(bio, nullptr, CryptoPemCallback, nullptr);
 
   if (crl == nullptr) {
-    return env->ThrowError("Failed to parse CRL");
     BIO_free_all(bio);
-    return;
+    return env->ThrowError("Failed to parse CRL");
   }
 
   X509_STORE* cert_store = SSL_CTX_get_cert_store(sc->ctx_);

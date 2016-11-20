@@ -312,50 +312,6 @@ $ node --no-warnings
 The `--trace-warnings` command-line option can be used to have the default
 console output for warnings include the full stack trace of the warning.
 
-#### Emitting custom warnings
-
-The [`process.emitWarning()`][process_emit_warning] method can be used to issue
-custom or application specific warnings.
-
-```js
-// Emit a warning using a string...
-process.emitWarning('Something happened!');
-  // Prints: (node 12345) Warning: Something happened!
-
-// Emit a warning using an object...
-process.emitWarning('Something Happened!', 'CustomWarning');
-  // Prints: (node 12345) CustomWarning: Something happened!
-
-// Emit a warning using a custom Error object...
-class CustomWarning extends Error {
-  constructor(message) {
-    super(message);
-    this.name = 'CustomWarning';
-    Error.captureStackTrace(this, CustomWarning);
-  }
-}
-const myWarning = new CustomWarning('Something happened!');
-process.emitWarning(myWarning);
-  // Prints: (node 12345) CustomWarning: Something happened!
-```
-
-#### Emitting custom deprecation warnings
-
-Custom deprecation warnings can be emitted by setting the `name` of a custom
-warning to `DeprecationWarning`. For instance:
-
-```js
-process.emitWarning('This API is deprecated', 'DeprecationWarning');
-```
-
-Or,
-
-```js
-const err = new Error('This API is deprecated');
-err.name = 'DeprecationWarning';
-process.emitWarning(err);
-```
-
 Launching Node.js using the `--throw-deprecation` command line flag will
 cause custom deprecation warnings to be thrown as exceptions.
 
@@ -367,6 +323,11 @@ of the custom deprecation.
 
 The `*-deprecation` command line flags only affect warnings that use the name
 `DeprecationWarning`.
+
+#### Emitting custom warnings
+
+See the [`process.emitWarning()`][process_emit_warning] method for issuing
+custom or application-specific warnings.
 
 ### Signal Events
 
@@ -764,13 +725,13 @@ specific process warnings. These can be listened for by adding a handler to the
 ```js
 // Emit a warning using a string...
 process.emitWarning('Something happened!');
-  // Emits: (node: 56338) Warning: Something happened!
+// Emits: (node: 56338) Warning: Something happened!
 ```
 
 ```js
 // Emit a warning using a string and a name...
 process.emitWarning('Something Happened!', 'CustomWarning');
-  // Emits: (node:56338) CustomWarning: Something Happened!
+// Emits: (node:56338) CustomWarning: Something Happened!
 ```
 
 In each of the previous examples, an `Error` object is generated internally by
@@ -795,7 +756,7 @@ const myWarning = new Error('Warning! Something happened!');
 myWarning.name = 'CustomWarning';
 
 process.emitWarning(myWarning);
-  // Emits: (node:56338) CustomWarning: Warning! Something Happened!
+// Emits: (node:56338) CustomWarning: Warning! Something Happened!
 ```
 
 A `TypeError` is thrown if `warning` is anything other than a string or `Error`
@@ -821,17 +782,16 @@ so, it is recommended to place the `emitWarning()` behind a simple boolean
 flag as illustrated in the example below:
 
 ```js
-var warned = false;
 function emitMyWarning() {
-  if (!warned) {
+  if (!emitMyWarning.warned) {
+    emitMyWarning.warned = true;
     process.emitWarning('Only warn once!');
-    warned = true;
   }
 }
 emitMyWarning();
-  // Emits: (node: 56339) Warning: Only warn once!
+// Emits: (node: 56339) Warning: Only warn once!
 emitMyWarning();
-  // Emits nothing
+// Emits nothing
 ```
 
 ## process.execArgv
